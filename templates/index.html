@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Canvas</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(45deg, #ffe5e5, #e5f0ff, #fff0e5, #e5fffa);
+            background-size: 400% 400%;
+            animation: gradient 20s ease infinite;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            padding: 20px;
+        }
+
+        .model-name {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .signature {
+            font-size: 1rem;
+            font-family: 'Dancing Script', cursive;
+            color: #666;
+            text-align: center;
+            margin-top: -10px;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: #666;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary {
+            background-color: #4a90e2;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            background-color: #357abd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .image-box {
+            width: 100%;
+            max-width: 600px;
+            margin-top: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .image-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            padding: 20px;
+            transform: translateX(-250px);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar button {
+            background-color: #4a90e2;
+            border: none;
+            color: #ffffff;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar button:hover {
+            background-color: #357abd;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin: 10px 0;
+        }
+
+        .sidebar li a {
+            color: #ffffff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-family: 'Dancing Script', cursive; /* Signature font for history items */
+        }
+
+        .sidebar li a:hover {
+            color: #4a90e2;
+        }
+
+        .toggle-sidebar {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .action-buttons a, .action-buttons button {
+            margin: 5px;
+            vertical-align: middle; /* Ensures buttons are aligned */
+        }
+
+        @media (max-width: 768px) {
+            .model-name {
+                font-size: 3rem;
+            }
+            .tagline {
+                font-size: 1.2rem;
+            }
+            .form-control, .btn-primary {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="toggle-sidebar">
+        <button onclick="toggleSidebar()" class="btn btn-primary btn-sm">Show History</button>
+    </div>
+    <div class="sidebar">
+        <button onclick="toggleSidebar()" class="btn btn-primary btn-sm mb-3">Hide History</button>
+        <h3>History</h3>
+        <ul id="imageList">
+            <!-- List of previous images will be dynamically added here -->
+        </ul>
+    </div>
+    <div class="container">
+        <div>
+            <h1 class="model-name">Dream Canvas</h1>
+            <p class="tagline">Transforming Words into Art</p>
+            <form method="POST">
+                <div class="form-group">
+                    <input type="text" name="prompt" class="form-control" placeholder="Enter your description" required>
+                    <button type="submit" class="btn btn-primary">Generate</button>
+                </div>
+            </form>
+            {% if image_url %}
+                <div class="mt-5">
+                    <img src="{{ image_url }}" alt="Generated Image" class="image-box img-fluid" id="generatedImage">
+                    <div class="action-buttons">
+                        <a href="{{ image_url }}" download="generated_image.webp" class="btn btn-success">Download Image</a>
+                        <button type="button" class="btn btn-secondary" onclick="createNew()">Create New</button>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        <p class="signature mt-4">Created by Adeel</p>
+    </div>
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+
+        function createNew() {
+            const imageBox = document.getElementById('generatedImage');
+            if (imageBox) {
+                imageBox.src = '';
+                imageBox.style.display = 'none';  // Hide the image to prevent showing a corrupted icon
+            }
+            document.querySelector('input[name="prompt"]').value = '';
+        }
+
+        // Populate previous images in the sidebar
+        const imageList = document.getElementById('imageList');
+        fetch('/history')
+            .then(response => response.json())
+            .then(images => {
+                images.forEach(image => {
+                    const listItem = document.createElement('li');
+                    const imageName = image.split('/').pop().split('.')[0];  // Extract image name
+                    listItem.innerHTML = `<a href="#" onclick="showImage('${image}')">${imageName}</a>`;
+                    imageList.appendChild(listItem);
+                });
+            });
+
+        function showImage(imagePath) {
+            const imageBox = document.getElementById('generatedImage');
+            imageBox.src = imagePath;
+            imageBox.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
